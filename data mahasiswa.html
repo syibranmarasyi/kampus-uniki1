@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Mahasiswa UNIKI</title>
+  <style>
+    body{font-family:Arial, sans-serif;margin:0;background:#f4f6f8;color:#222}
+    header{background:#1e3a8a;color:#fff;text-align:center;padding:20px 10px}
+    main{padding:20px}
+    table{width:100%;border-collapse:collapse;margin-top:10px;background:#fff}
+    th,td{border:1px solid #ddd;padding:8px;text-align:left}
+    th{background:#2563eb;color:#fff}
+    button{background:#2563eb;color:white;border:none;padding:8px 12px;border-radius:6px;cursor:pointer}
+    button:hover{background:#1e40af}
+    .btn-hapus{background:#dc2626;margin-left:5px}
+    .btn-hapus:hover{background:#b91c1c}
+    .btn-edit{background:#f59e0b;margin-left:5px}
+    .btn-edit:hover{background:#d97706}
+    #formTambah{display:none;background:#fff;padding:15px;margin-top:15px;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.1)}
+    input{padding:6px;width:100%;margin:6px 0;border:1px solid #ccc;border-radius:4px}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Data Mahasiswa Universitas Islam Kebangsaan Indonesia (UNIKI)</h1>
+  </header>
+
+  <main>
+    <button onclick="toggleForm()">+ Tambah Data Mahasiswa</button>
+    
+    <div id="formTambah">
+      <h3 id="formTitle">Tambah Data Mahasiswa</h3>
+      <input type="text" id="nama" placeholder="Nama Mahasiswa">
+      <input type="text" id="nim" placeholder="NIM">
+      <input type="text" id="prodi" placeholder="Program Studi">
+      <input type="text" id="angkatan" placeholder="Angkatan">
+      <button onclick="simpanData()">Simpan</button>
+    </div>
+
+    <table id="tabelMahasiswa">
+      <tr><th>Nama</th><th>NIM</th><th>Program Studi</th><th>Angkatan</th><th>Aksi</th></tr>
+      <tr><td>Rizki Fadillah</td><td>2101001</td><td>Teknik Informatika</td><td>2021</td><td><button class='btn-edit' onclick='editBaris(this)'>Edit</button><button class='btn-hapus' onclick='hapusBaris(this)'>Hapus</button></td></tr>
+      <tr><td>Nur Aini</td><td>2102002</td><td>Manajemen</td><td>2022</td><td><button class='btn-edit' onclick='editBaris(this)'>Edit</button><button class='btn-hapus' onclick='hapusBaris(this)'>Hapus</button></td></tr>
+      <tr><td>Syahrul Ramadhan</td><td>2103003</td><td>Akuntansi</td><td>2023</td><td><button class='btn-edit' onclick='editBaris(this)'>Edit</button><button class='btn-hapus' onclick='hapusBaris(this)'>Hapus</button></td></tr>
+    </table>
+  </main>
+
+  <script>
+    let editRow = null;
+
+    function toggleForm(){
+      const form=document.getElementById('formTambah');
+      form.style.display=form.style.display==='none'||form.style.display===''?'block':'none';
+      if(form.style.display==='none'){editRow=null;document.getElementById('formTitle').innerText='Tambah Data Mahasiswa';clearForm();}
+    }
+
+    function clearForm(){
+      document.getElementById('nama').value='';
+      document.getElementById('nim').value='';
+      document.getElementById('prodi').value='';
+      document.getElementById('angkatan').value='';
+    }
+
+    function simpanData(){
+      const nama=document.getElementById('nama').value;
+      const nim=document.getElementById('nim').value;
+      const prodi=document.getElementById('prodi').value;
+      const angkatan=document.getElementById('angkatan').value;
+
+      if(!nama||!nim||!prodi||!angkatan){alert('Semua data wajib diisi!');return;}
+
+      if(editRow){
+        editRow.cells[0].innerText=nama;
+        editRow.cells[1].innerText=nim;
+        editRow.cells[2].innerText=prodi;
+        editRow.cells[3].innerText=angkatan;
+        editRow=null;
+        document.getElementById('formTitle').innerText='Tambah Data Mahasiswa';
+      } else {
+        const tabel=document.getElementById('tabelMahasiswa');
+        const row=tabel.insertRow();
+        row.insertCell(0).innerText=nama;
+        row.insertCell(1).innerText=nim;
+        row.insertCell(2).innerText=prodi;
+        row.insertCell(3).innerText=angkatan;
+        row.insertCell(4).innerHTML="<button class='btn-edit' onclick='editBaris(this)'>Edit</button><button class='btn-hapus' onclick='hapusBaris(this)'>Hapus</button>";
+      }
+
+      clearForm();
+      toggleForm();
+    }
+
+    function editBaris(btn){
+      const row=btn.parentNode.parentNode;
+      editRow=row;
+      document.getElementById('nama').value=row.cells[0].innerText;
+      document.getElementById('nim').value=row.cells[1].innerText;
+      document.getElementById('prodi').value=row.cells[2].innerText;
+      document.getElementById('angkatan').value=row.cells[3].innerText;
+      document.getElementById('formTitle').innerText='Edit Data Mahasiswa';
+      document.getElementById('formTambah').style.display='block';
+    }
+
+    function hapusBaris(btn){
+      if(confirm('Apakah Anda yakin ingin menghapus data ini?')){
+        const row=btn.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+      }
+    }
+  </script>
+</body>
+</html>
